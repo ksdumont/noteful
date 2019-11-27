@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-// import { format, parseISO } from 'date-fns'
+// import { format } from 'date-fns'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ApiContext from '../ApiContext'
 import config from '../config'
@@ -54,8 +54,7 @@ export default class Note extends React.Component {
             Modified
             {' '}
             <span className='Date'>
-              {/* {format(parseISO(modified, 'Do MMM YYYY'))} */}
-              {Date.parse(modified).toDateString}
+              {new Date(modified).toDateString()}
             </span>            
           </div>
         </div>

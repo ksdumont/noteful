@@ -15,8 +15,16 @@ export default class AddFolder extends Component {
     }
     static contextType = ApiContext;
 
+    // validateFolderName(fieldValue) {
+    //     fieldValue = fieldValue.trim();
+    //     if (fieldValue.length === 0) {
+    //         alert('Folder must have a name');
+    //     }
+    // }
+
     handleSubmit = e => {
         e.preventDefault()
+        // this.validateFolderName(e.target['folder-name'].value);
         const folder = {
             name: e.target['folder-name'].value
         }
@@ -49,7 +57,7 @@ export default class AddFolder extends Component {
                         <label htmlFor='folder-name-input'>
                             Name
                         </label>
-                        <input type='text' id='folder-name-input' name='folder-name' />
+                        <input type='text' id='folder-name-input' name='folder-name' required />
                     </div>
                     <div className='buttons'>
                         <button type='submit'>
