@@ -3,8 +3,8 @@ import NotefulForm from '../NotefulForm/NotefulForm'
 import ApiContext from '../ApiContext'
 import config from '../config'
 import NoteValidationError from './NoteValidationError'
-import NotefulError from '../NotefulError/NotefulError'
-import PropTypes from 'prop-types';
+// import NotefulError from '../NotefulError/NotefulError'
+// import PropTypes from 'prop-types';
 import './AddNote.css'
 
 export default class AddNote extends Component {
@@ -12,9 +12,13 @@ export default class AddNote extends Component {
         super(props)
         this.state = {
             nameValid: false,
+            folderValid: false,
+            formValid: false,
             name: '',
+            folder: null,
             validationMessages: {
                 name: '',
+                folder: ''
             }
         }
     }
@@ -24,6 +28,19 @@ export default class AddNote extends Component {
         },
     }
     static contextType = ApiContext;
+
+    validateFolder(folderId) {
+        const fieldErrors = this.state.validationMessages;
+        let hasError = false;
+        if (!this.context.folders.find(f => f.id === folderId)) {
+            fieldErrors.folder = 'Folder is required';
+            hasError = true;
+        }
+        this.setState({
+            validationMessages: fieldErrors,
+            folderValid: !hasError
+        }, () => this.formValid());
+    }
 
     validateName(fieldValue) {
         const fieldErrors = {...this.state.validationMessages};
@@ -36,19 +53,29 @@ export default class AddNote extends Component {
         this.setState({
             validationMessages: fieldErrors,
             nameValid: !hasError
-        }, this.formValid ); 
+        }, () => this.formValid()); 
     }
     formValid() {
         this.setState({
-            formValid: this.state.nameValid
+            formValid: this.state.nameValid && this.state.folderValid
         });
     }
     updateName(name){
         this.setState({name}, ()=>{this.validateName(name)});
       }
+      updateFolder(folder) {
+          this.setState({folder}, () => {this.validateFolder(folder)});
+      }
 
     handleSubmit = e => {
         e.preventDefault()
+        
+        this.validateFolder(e.target['note-folder-id'].value);
+        this.validateName(e.target['note-name'].value);
+
+        if (!this.state.formValid)
+        return;
+        
         const newNote = {
             name: e.target['note-name'].value,
             content: e.target['note-content'].value,
@@ -72,11 +99,12 @@ export default class AddNote extends Component {
             this.props.history.push(`/folder/${note.folderId}`)
         })
         .catch(error => {
+            alert('There was an error communicating with the server');
             console.error({error})
         })
     }
     render() {
-        const {folders=[]} = this.context
+        const {folders=[]} = this.context;
         return (
             <section className='AddNote'>
                 <h2>Create a Note</h2>
@@ -86,7 +114,7 @@ export default class AddNote extends Component {
                             Name
                         </label>
                         <input type='text' id='note-name-input' name='note-name' onChange={e => this.updateName(e.target.value)} required />
-                        <NoteValidationError className='validationError' hasError={!this.state.name} message={this.state.validationMessages.name}></NoteValidationError>
+                        <NoteValidationError className='validationError' hasError={!this.state.nameValid} message={this.state.validationMessages.name}></NoteValidationError>
                     </div>
                     <div className='field'>
                         <label htmlFor='note-content-input'>
@@ -98,7 +126,7 @@ export default class AddNote extends Component {
                         <label htmlFor='note-folder-select'>
                             Folder
                         </label>
-                        <select id='note-folder-select' name='note-folder-id'>
+                        <select id='note-folder-select' name='note-folder-id' onChange={e => this.updateFolder(e.target.value)}>
                             <option value={null}>...</option>
                             {folders.map(folder =>
                                 <option key={folder.id} value={folder.id}>
@@ -106,6 +134,7 @@ export default class AddNote extends Component {
                                 </option>
                                 )}
                         </select>
+                        <NoteValidationError className='validationError' hasError={!this.state.folderValid} message={this.state.validationMessages.folder} />
                     </div>
                     <div className='buttons'>
                         <button type='submit'>

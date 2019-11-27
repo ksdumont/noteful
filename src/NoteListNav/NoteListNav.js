@@ -5,7 +5,7 @@ import CircleButton from '../CircleButton/CircleButton'
 import ApiContext from '../ApiContext'
 import { countNotesForFolder } from '../notes-helper'
 import './NoteListNav.css'
-import AddFolder from '../AddFolder/AddFolder';
+// import AddFolder from '../AddFolder/AddFolder';
 
 
 
