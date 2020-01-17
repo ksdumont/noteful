@@ -32,7 +32,7 @@ export default class AddNote extends Component {
     validateFolder(folderId) {
         const fieldErrors = this.state.validationMessages;
         let hasError = false;
-        if (!this.context.folders.find(f => f.id === folderId)) {
+        if (!this.context.folders.find(f => f.id === Number(folderId))) {
             fieldErrors.folder = 'Folder is required';
             hasError = true;
         }
@@ -82,7 +82,7 @@ export default class AddNote extends Component {
             folder: e.target['note-folder-id'].value,
             date_modified: new Date(),
         }
-        fetch(`${config.API_ENDPOINT}/notes`, {
+        fetch(`${config.API_ENDPOINT}/api/notes`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
