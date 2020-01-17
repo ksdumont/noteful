@@ -36,12 +36,12 @@ export default class Note extends React.Component {
     })
   }
   render() {
-    const {name, id, modified} = this.props
+    const {title, id, date_modified} = this.props
     return (
       <div className='Note'>
         <h2 className='Note__title'>
           <Link to={`/note/${id}`}>
-            {name}
+            {title}
           </Link>
         </h2>
         <button className='Note__delete' type='button' onClick={this.handleClickDelete}>
@@ -54,7 +54,7 @@ export default class Note extends React.Component {
             Modified
             {' '}
             <span className='Date'>
-              {new Date(modified).toDateString()}
+              {new Date(date_modified).toDateString()}
             </span>            
           </div>
         </div>

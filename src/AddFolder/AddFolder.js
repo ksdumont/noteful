@@ -26,7 +26,7 @@ export default class AddFolder extends Component {
         e.preventDefault()
         // this.validateFolderName(e.target['folder-name'].value);
         const folder = {
-            name: e.target['folder-name'].value
+            title: e.target['title'].value
         }
         fetch(`${config.API_ENDPOINT}/api/folders`, {
             method: 'POST',
@@ -57,7 +57,7 @@ export default class AddFolder extends Component {
                         <label htmlFor='folder-name-input'>
                             Name
                         </label>
-                        <input type='text' id='folder-name-input' name='folder-name' required />
+                        <input type='text' id='folder-name-input' name='title' required />
                     </div>
                     <div className='buttons'>
                         <button type='submit'>
