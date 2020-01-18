@@ -1,0 +1,9 @@
+{
+    "version": 2,
+    "alias": "https://ksdumont-noteful-app.now.sh",
+    "name": "noteful",
+    "routes": [
+        { "handle": "filesystem" },
+        { "src": "/.*", "dest": "/index.html" }
+    ]
+  }
