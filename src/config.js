@@ -1,3 +1,3 @@
 export default {
-    API_ENDPOINT: 'http://localhost:8000'
+    API_ENDPOINT: 'https://afternoon-mesa-24212.herokuapp.com/'
   }
